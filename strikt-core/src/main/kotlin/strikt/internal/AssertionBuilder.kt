@@ -85,6 +85,10 @@ internal class AssertionBuilder<T>(
           composedContext.block()
           return this@AssertionBuilder
         }
+
+        override fun <R> map(block: CompoundAssertion.() -> Builder<R>): Builder<R> {
+          return composedContext.block()
+        }
       }
     } else {
       // return a no-op implementation, this will never get invoked. If
@@ -93,6 +97,10 @@ internal class AssertionBuilder<T>(
       object : CompoundAssertions<T> {
         override fun then(block: CompoundAssertion.() -> Unit): Builder<T> {
           return this@AssertionBuilder
+        }
+
+        override fun <R> map(block: CompoundAssertion.() -> Builder<R>): Builder<R> {
+          TODO("Not yet implemented")
         }
       }
     }

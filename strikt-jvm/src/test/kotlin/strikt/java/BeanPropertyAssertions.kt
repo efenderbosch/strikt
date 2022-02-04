@@ -8,6 +8,7 @@ import strikt.assertions.isA
 import strikt.assertions.isEqualTo
 import strikt.assertions.isNotNull
 import strikt.assertions.isNull
+import strikt.assertions.isSameInstanceAs
 import strikt.assertions.isTrue
 import java.time.LocalDate
 import java.util.UUID
@@ -185,5 +186,18 @@ internal object BeanPropertyAssertions {
             |              found 0""".trimMargin()
         )
     }
+  }
+
+  @Test
+  fun `ignores excluded properties fluent`() {
+    val person1 = PersonKotlin(
+      id = UUID.randomUUID(),
+      name = "name",
+      dateOfBirth = LocalDate.now(),
+      image = byteArrayOf()
+    )
+    val person2 = person1.copy(id = UUID.randomUUID())
+    val subject = expectThat(person1).ignoring(PersonKotlin::id).isEqualTo(person2).subject
+    expectThat(subject).isSameInstanceAs(person1)
   }
 }

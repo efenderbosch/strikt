@@ -13,4 +13,6 @@ interface CompoundAssertions<T> {
    * of its child assertions.
    */
   infix fun then(block: CompoundAssertion.() -> Unit): Builder<T>
+
+  infix fun <R> map(block: CompoundAssertion.() -> Builder<R>): Builder<R>
 }
