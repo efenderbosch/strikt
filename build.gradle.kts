@@ -1,9 +1,7 @@
 import com.adarshr.gradle.testlogger.TestLoggerExtension
 import com.adarshr.gradle.testlogger.theme.ThemeType.MOCHA_PARALLEL
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
-import info.solidsoft.gradle.pitest.PitestPluginExtension
 import io.codearte.gradle.nexus.NexusStagingExtension
-import org.gradle.api.JavaVersion.VERSION_1_8
 import org.gradle.api.JavaVersion.VERSION_11
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jmailen.gradle.kotlinter.KotlinterExtension
@@ -13,9 +11,8 @@ plugins {
   kotlin("jvm") apply false
   id("io.codearte.nexus-staging") version "0.30.0"
   id("org.jmailen.kotlinter") version "3.12.0" apply false
-  id("info.solidsoft.pitest") version "1.6.0" apply false
   id("com.adarshr.test-logger") version "3.2.0" apply false
-  id("com.github.ben-manes.versions") version "0.43.0"
+  id("com.github.ben-manes.versions") version "0.44.0"
   id("org.jetbrains.dokka")
   id("org.jetbrains.kotlinx.kover") version "0.6.1"
 }
@@ -88,21 +85,6 @@ subprojects {
         ignoreFailures = true
 //        indentSize = 2
         reporters = arrayOf("html", "plain")
-      }
-    }
-
-    plugins.withId("info.solidsoft.pitest") {
-      configure<PitestPluginExtension> {
-        junit5PluginVersion.set("0.12")
-        avoidCallsTo.set(setOf("kotlin.jvm.internal"))
-        targetClasses.set(setOf("strikt.*"))  // by default "${project.group}.*"
-        targetTests.set(setOf("strikt.**.*"))
-        pitestVersion.set("1.6.2")
-        threads.set(
-          System.getenv("PITEST_THREADS")?.toInt()
-            ?: Runtime.getRuntime().availableProcessors()
-        )
-        outputFormats.set(setOf("XML", "HTML"))
       }
     }
   }
